@@ -28,17 +28,16 @@ from email_validator import validate_email, EmailNotValidError
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 
-# SPREADSHEET_ID = "1kVz5h2XFLJj_qHlpTKuBYC-_ncUE_-ThSWWMhbPekEE"
-SHEET_ID = "1OASO2l13Uni0sAYrZkq_PvFLbwlbOQXKR5fI3AMI5fg"
-SHEET_NAME  = "ACPN AI Automation Sheet"
+SHEET_ID = "***********************************"
+SHEET_NAME  = "********** Automation Sheet"
 RANGE_NAME = "Sheet1"
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROW_SAVE_PATH = os.path.join(BASE_DIR, "row_save.txt")
 
-SMTP_SERVER = 'smtp.gmail.com'  
-SMTP_PORT = 587  
-USERNAME = 'updates@acpnusa.com' 
-PASSWORD = 'PN0@@cpn23!!'  
+SMTP_SERVER = '*************'  
+SMTP_PORT = ************  
+USERNAME = '***********' 
+PASSWORD = '*****************'  
 
 def get_google_credentials():
     creds = None
@@ -442,3 +441,4 @@ if __name__ == "__main__":
 
 
     driver.quit()
+
