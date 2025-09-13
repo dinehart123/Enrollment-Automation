@@ -20,7 +20,7 @@ processed_image_folder = r"C:\******\*******\******\********\***** ******\******
 contracts_path = r"C:***********.txt"
 specialties_path = r"C:***********.txt"
 service_account_path = r"***********.json"
-sheet_name = "ACPN AI Automation Sheet"
+sheet_name = "********* Automation Sheet"
 
 # === Load Specialty List ===
 with open(specialties_path, "r", encoding="utf-8") as f:
@@ -152,7 +152,7 @@ for img_path in image_paths:
         elif img_path.lower().endswith(".pdf"):
             image_pages = convert_from_path(
                 img_path, dpi=300,
-                poppler_path=r"C:\Users\bkmed\OneDrive\Desktop\ACPN Automation\Release-24.08.0-0\poppler-24.08.0\Library\bin"
+                poppler_path=r"C:\*****\*****\*****\*****\***** *****\*****\poppler-24.08.0\Library\bin"
             )
             for page_num, image in enumerate(image_pages, start=1):
                 text = pytesseract.image_to_string(image)
@@ -164,7 +164,7 @@ for img_path in image_paths:
             all_text += text
 
         else:
-            print("⚠️ Unsupported file type.")
+            print(" Unsupported file type.")
             continue
         print("file processed")
         print(all_text)
@@ -354,5 +354,6 @@ for img_path in image_paths:
 
     except Exception as e:
         print(f" Error processing {img_path}: {e}")
+
 
 
