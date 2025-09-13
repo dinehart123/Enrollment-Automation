@@ -14,12 +14,12 @@ import pandas as pd
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 
 # === Paths and Config ===
-unprocessed_image_folder = r"C:\Users\bkmed\OneDrive\Desktop\ACPN Automation\vision\unprocessed images"
-processed_image_folder = r"C:\Users\bkmed\OneDrive\Desktop\ACPN Automation\vision\processed images"
+unprocessed_image_folder = r"C:\******\*******\*******\********\*** ********\***********\unprocessed images"
+processed_image_folder = r"C:\******\*******\******\********\***** ******\***********\processed images"
 
-contracts_path = r"C:\Users\bkmed\OneDrive\Desktop\ACPN Automation\dropdowncontracts.txt"
-specialties_path = r"C:\Users\bkmed\OneDrive\Desktop\ACPN Automation\specialty.txt"
-service_account_path = r"vision/acpn-and-selenium-automation-88e36db62d09.json"
+contracts_path = r"C:***********.txt"
+specialties_path = r"C:***********.txt"
+service_account_path = r"***********.json"
 sheet_name = "ACPN AI Automation Sheet"
 
 # === Load Specialty List ===
@@ -131,7 +131,7 @@ def write_into_cell(worksheet, next_row, entry, data_name, column):
 
 for img_path in image_paths:
     try:
-        print(f"\n📄 Processing image: {img_path}")
+        print(f"\n Processing image: {img_path}")
         # === OCR ===
         # image = Image.open(img_path)
         # text = pytesseract.image_to_string(image)
@@ -139,7 +139,7 @@ for img_path in image_paths:
         all_text = ""
 
         if img_path.lower().endswith(".xlsx"):
-            print(f"\n📄 Processing Excel file: {img_path}")
+            print(f"\n Processing Excel file: {img_path}")
             excel_data = pd.read_excel(img_path, sheet_name=None)
             for sheet_name, df in excel_data.items():
                 all_text += f"\n--- Sheet: {sheet_name} ---\n"
@@ -168,28 +168,7 @@ for img_path in image_paths:
             continue
         print("file processed")
         print(all_text)
-
-        # if img_path.lower().endswith(".xlsx"):
-        #     print(f"\n📄 Processing Excel file: {img_path}")
-        #     df = pd.read_excel(img_path)
-
-        #     # Flatten Excel into text (you could improve this if the structure is consistent)
-        #     all_text = ""
-        #     for _, row in df.iterrows():
-        #         line = " ".join([str(val) for val in row if pd.notnull(val)])
-        #         all_text += line + "\n"
-        # if img_path.lower().endswith(".pdf"):
-        #     image_pages = convert_from_path(img_path, dpi=500, poppler_path=r"C:\Users\bkmed\OneDrive\Desktop\ACPN Automation\Release-24.08.0-0\poppler-24.08.0\Library\bin")
-        # else:
-        #     image_pages = [Image.open(img_path)]
-
-        # all_text = ""
-        # for page_num, image in enumerate(image_pages, start=1):
-        #     text = pytesseract.image_to_string(image)
-        #     all_text += f"\n--- Page {page_num} ---\n{text}"
-
-        # print(all_text)
-
+        
         # === Build LLM Extraction Prompt ===
         extract_prompt = f"""
         You are a document data extractor for a health care provider network. Here's the OCR text from a form:
@@ -276,34 +255,29 @@ for img_path in image_paths:
         Return the result as **strict JSON only**. Do not include any comments, explanations, no commas, or extra text — only the JSON object.
         """
 
-        # response = requests.post(
-        #     'http://localhost:11434/api/generate',
-        #     json={'model': 'mistral', 'prompt': extract_prompt, 'temperature': 0, 'stream': False}
-        # )
-
         try:
-            print("🚀 Sending request to LLM...")
+            print(" Sending request to LLM")
             response = requests.post(
                 'http://localhost:11434/api/generate',
                 json={'model': 'mistral', 'prompt': extract_prompt, 'temperature': 0, 'stream': False},
                 timeout=60  # prevent freezing forever
             )
-            print("✅ LLM responded")
+            print("LLM responded")
         except requests.exceptions.Timeout:
-            print("❌ Request to LLM timed out.")
+            print("Request to LLM timed out.")
             continue
         except requests.exceptions.RequestException as e:
-            print(f"❌ Request to LLM failed: {e}")
+            print(f"Request to LLM failed: {e}")
             continue
 
         print("extracted")
 
         if response.status_code != 200:
-            print("❌ LLM extraction failed.")
+            print(" LLM extraction failed.")
             continue
         
         raw_response = response.json()['response']
-        print("🔍 Raw LLM Response:\n", raw_response)
+        print(" Raw LLM Response:\n", raw_response)
 
         entry = json.loads(response.json()['response'])
 
@@ -341,7 +315,7 @@ for img_path in image_paths:
             entry["Secondary Specialty"] = matched.get("Secondary Specialty", entry.get("Secondary Specialty"))
             entry["Tertiary Specialty"] = matched.get("Tertiary Specialty", entry.get("Tertiary Specialty"))
         else:
-            print("⚠️ Specialty matching failed.")
+            print(" Specialty matching failed.")
 
         # === Write to Sheet ===
         next_row = len(worksheet.get_all_values()) + 1
@@ -367,17 +341,18 @@ for img_path in image_paths:
         for field, col in write_map.items():
             write_into_cell(worksheet, next_row, entry, field, col)
 
-        print("✅ Finished writing to sheet.")
+        print("Finished writing to sheet.")
 
         # moves images to processed folder
         try:
             filename = os.path.basename(img_path)
             dest_path = os.path.join(processed_image_folder, filename)
             shutil.move(img_path, dest_path)
-            print(f"📁 Moved to processed folder: {dest_path}")
+            print(f" Moved to processed folder: {dest_path}")
         except Exception as move_err:
-            print(f"⚠️ Failed to move image: {img_path} -> {processed_image_folder}\n{move_err}")
+            print(f" Failed to move image: {img_path} -> {processed_image_folder}\n{move_err}")
 
     except Exception as e:
-        print(f"❌ Error processing {img_path}: {e}")
+        print(f" Error processing {img_path}: {e}")
+
 
