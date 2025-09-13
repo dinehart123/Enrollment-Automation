@@ -278,10 +278,10 @@ def check_provider_existence(taxid,pnpi,gnpi):
 
 
 def load_browser():
-    driver.get("https://3p.acpnusa.com/pars.aspx")
-    type_in_id("UserName", "PNOAadmin")
+    driver.get("https://*******.***********.com/*****.****")
+    type_in_id("UserName", "*************")
     input_element = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID,"Password")))
-    input_element.send_keys("PNO@acpn121123?!" + Keys.ENTER)
+    input_element.send_keys("**************" + Keys.ENTER)
 
 def new_location(provider_list):
     WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, "newlocation"))).click()
@@ -430,7 +430,7 @@ if __name__ == "__main__":
         save_provider_and_refresh()
         curr_row = i+1
         # body = "Hello, the provider " + str(enrollment_list[i][3]) + " " + str(enrollment_list[i][4]) + " has been successfully enrolled. Effective date: " + enrollment_list[i][7] +"; ID Number: " + str(par_id)
-        # send_email('updates@acpnusa.com', str(enrollment_list[i][2]), str(enrollment_list[i][3]) + " " + str(enrollment_list[i][4]) + " Enrollment Complete", body, None)
+        # send_email('*******@*******.com', str(enrollment_list[i][2]), str(enrollment_list[i][3]) + " " + str(enrollment_list[i][4]) + " Enrollment Complete", body, None)
 
 
     print("exited")
@@ -441,4 +441,5 @@ if __name__ == "__main__":
 
 
     driver.quit()
+
 
